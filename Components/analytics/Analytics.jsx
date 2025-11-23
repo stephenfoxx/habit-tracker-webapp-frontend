@@ -16,6 +16,9 @@ import {
 export default function Analytics() {
   const { habits, activeBoxes } = useContext(HabitsContexts);
 
+
+
+            // for the graph
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   const chartData = daysOfWeek.map((day, colIndex) => {
@@ -27,7 +30,7 @@ export default function Analytics() {
   });
 
   const stats = calculateSummaryStats(habits, activeBoxes);
-
+ 
   return (
     <main className="analytics">
       <h1>Analytics</h1>

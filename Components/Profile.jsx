@@ -2,6 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../Components/ThemeContent";
 
+// ✅ Use deployed backend URL
+const API = import.meta.env.VITE_API_URL;
+
 export default function Profile() {
   const { darkMode, setDarkMode } = useContext(ThemeContext);
   const navigate = useNavigate();
@@ -24,7 +27,7 @@ export default function Profile() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:5000/auth/me", {
+        const res = await fetch(`${API}/auth/me`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -32,6 +35,7 @@ export default function Profile() {
         });
 
         if (!res.ok) throw new Error("Failed to fetch profile");
+
         const data = await res.json();
 
         setUser({
@@ -60,7 +64,7 @@ export default function Profile() {
       setPreview(base64);
 
       try {
-        const res = await fetch("http://localhost:5000/auth/me/image", {
+        const res = await fetch(`${API}/auth/me/image`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -70,6 +74,7 @@ export default function Profile() {
         });
 
         if (!res.ok) throw new Error("Failed to update image");
+
         const updatedUser = await res.json();
         setUser(updatedUser);
       } catch (err) {
@@ -83,7 +88,7 @@ export default function Profile() {
   // -------------------- Save Profile --------------------
   const handleSave = async () => {
     try {
-      const res = await fetch("http://localhost:5000/auth/me", {
+      const res = await fetch(`${API}/auth/me`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -147,8 +152,6 @@ export default function Profile() {
         <button onClick={handleSave}>Save</button>
       </div>
 
-      
-
       <div className="toggle-container">
         <label className="switch">
           <input
@@ -168,3 +171,26 @@ export default function Profile() {
     </main>
   );
 }
+
+// function firstU(str) {
+//   const count = [];
+
+//   for (let char of str) {
+//     count[char] = (count[char] || 0) + 1;
+
+//     for (let char of str) {
+//       if (count[char] === 1) {
+//         return char
+//       }
+//     }
+//   }
+//   return null;
+// }
+
+// function filterAndSort(arr) {
+//   return arr.filter(num => num & 2 === 0).sort((a, b) => a - b)
+// }
+
+// function updateTools(todos, newtodo) {
+//   return [...todos, newtodo].filter(item => item.trim() !== "").sort();
+// }

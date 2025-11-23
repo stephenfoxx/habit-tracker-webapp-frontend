@@ -1,6 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+// ✅ Use deployed backend URL
+const API = import.meta.env.VITE_API_URL;
+
 export default function Welcome() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -17,7 +20,7 @@ export default function Welcome() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/auth/", {
+      const res = await fetch(`${API}/auth/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -31,7 +34,6 @@ export default function Welcome() {
         // Extract just the first name (before space)
         const firstName = data.user.username.split(" ")[0];
 
-        
         // ✅ Clear any previous data from localStorage
         localStorage.clear();
 
@@ -42,8 +44,6 @@ export default function Welcome() {
         localStorage.setItem("email", data.user.email);
 
         // ✅ Navigate to Home page (with state)
-
-        
         navigate("/home", { state: { firstName } });
       } else {
         setError(data.message || "Invalid email or password");

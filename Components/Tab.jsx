@@ -1,6 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { HabitsContexts } from "./analytics/HabitContent";
 
+// ✅ Use deployed backend URL
+const API = import.meta.env.VITE_API_URL;
+
 export default function Tab() {
   const [dateTime, setDateTime] = useState(new Date());
   const { habits, setHabits, activeBoxes, setActiveBoxes } =
@@ -33,7 +36,7 @@ export default function Tab() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:5000/habits", {
+        const res = await fetch(`${API}/habits`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -41,6 +44,7 @@ export default function Tab() {
         });
 
         if (!res.ok) throw new Error("Failed to fetch habits");
+
         const data = await res.json();
 
         setHabits(data);
@@ -62,7 +66,7 @@ export default function Tab() {
     // Update server
     try {
       const habitId = habits[row]._id;
-      await fetch(`http://localhost:5000/habits/${habitId}/toggle`, {
+      await fetch(`${API}/habits/${habitId}/toggle`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +94,7 @@ export default function Tab() {
     if (!newHabitName) return;
 
     try {
-      const res = await fetch("http://localhost:5000/habits", {
+      const res = await fetch(`${API}/habits`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,8 +118,9 @@ export default function Tab() {
   // -------------------- Update Habit --------------------
   async function updateHabit(index) {
     const habitId = habits[index]._id;
+
     try {
-      const res = await fetch(`http://localhost:5000/habits/${habitId}`, {
+      const res = await fetch(`${API}/habits/${habitId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -125,6 +130,7 @@ export default function Tab() {
       });
 
       if (!res.ok) throw new Error("Failed to update habit");
+
       const data = await res.json();
 
       setHabits((prev) =>
@@ -142,7 +148,7 @@ export default function Tab() {
   async function removeHabit(index) {
     const habitId = habits[index]._id;
     try {
-      await fetch(`http://localhost:5000/habits/${habitId}`, {
+      await fetch(`${API}/habits/${habitId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
