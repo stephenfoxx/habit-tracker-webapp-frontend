@@ -1,0 +1,78 @@
+/* =========================================================
+   RESPONSIVE.CSS — UNIVERSAL RESPONSIVE STARTER FILE
+   Include this before your custom styles.
+========================================================= */
+
+/* Reset & Base Layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  color: #222;
+  background: #fff;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
+/* Media auto-resizes */
+img, video, canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Fluid typography */
+h1 { font-size: clamp(1.8rem, 4vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); }
+h3 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
+p  { font-size: clamp(0.9rem, 1.5vw, 1.1rem); }
+
+/* Containers */
+.container {
+  width: min(90%, 1200px);
+  margin: auto;
+}
+
+/* Flex helpers */
+.flex { display: flex; align-items: center; }
+.flex-col { display: flex; flex-direction: column; }
+.center { display: flex; justify-content: center; align-items: center; }
+.space-between { display: flex; justify-content: space-between; }
+
+/* Grid helpers */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.col {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* Visibility helpers */
+.hidden { display: none !important; }
+.show-md { display: none; }
+@media (max-width: 768px) {
+  .hide-md { display: none !important; }
+  .show-md { display: block !important; }
+
+  body {
+    padding: 1rem;
+  }
+
+  .row {
+    gap: 0.7rem;
+  }
+}

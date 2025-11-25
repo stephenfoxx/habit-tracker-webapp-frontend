@@ -63,19 +63,16 @@ export default function Tab() {
     newBoxes[row][col] = !newBoxes[row][col];
     setActiveBoxes(newBoxes);
 
-    // Update server
+    // Use the index instead of ID
     try {
-      const habitId = habits[row]._id;
-      await fetch(`${API}/habits/${habitId}/toggle`, {
+      await fetch(`${API}/habits/${row}/day/${col}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ dayIndex: col, value: newBoxes[row][col] }),
       });
 
-      // Show congrats if all habits for the day are completed
       const allCompleted = newBoxes.every((row) => row[col]);
       if (allCompleted) {
         setShowCongrats(true);
@@ -117,10 +114,8 @@ export default function Tab() {
 
   // -------------------- Update Habit --------------------
   async function updateHabit(index) {
-    const habitId = habits[index]._id;
-
     try {
-      const res = await fetch(`${API}/habits/${habitId}`, {
+      const res = await fetch(`${API}/habits/${index}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -131,10 +126,9 @@ export default function Tab() {
 
       if (!res.ok) throw new Error("Failed to update habit");
 
-      const data = await res.json();
-
+      // Update UI instantly using editValue
       setHabits((prev) =>
-        prev.map((h, i) => (i === index ? { ...h, name: data.name } : h))
+        prev.map((h, i) => (i === index ? { ...h, name: editValue } : h))
       );
 
       setEditingIndex(null);
@@ -146,9 +140,8 @@ export default function Tab() {
 
   // -------------------- Delete Habit --------------------
   async function removeHabit(index) {
-    const habitId = habits[index]._id;
     try {
-      await fetch(`${API}/habits/${habitId}`, {
+      await fetch(`${API}/habits/${index}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -208,7 +201,7 @@ export default function Tab() {
       <div className="habit-grid-wrapper">
         <ul className="habit-list">
           {habits.map((h, rowIndex) => (
-            <li key={h._id || rowIndex} className="habit-tag">
+            <li key={rowIndex} className="habit-tag">
               {editingIndex === rowIndex ? (
                 <>
                   <input
