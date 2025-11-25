@@ -63,7 +63,6 @@ export default function Tab() {
     newBoxes[row][col] = !newBoxes[row][col];
     setActiveBoxes(newBoxes);
 
-    // Use the index instead of ID
     try {
       await fetch(`${API}/habits/${row}/day/${col}`, {
         method: "PATCH",
@@ -126,7 +125,6 @@ export default function Tab() {
 
       if (!res.ok) throw new Error("Failed to update habit");
 
-      // Update UI instantly using editValue
       setHabits((prev) =>
         prev.map((h, i) => (i === index ? { ...h, name: editValue } : h))
       );
@@ -214,7 +212,7 @@ export default function Tab() {
                 </>
               ) : (
                 <>
-                  {h.name}{" "}
+                  <span className="habit-name">{h.name}</span>
                   {isHabitCompletedToday(rowIndex) && (
                     <span className="habit-completed-msg">✅Completed</span>
                   )}
